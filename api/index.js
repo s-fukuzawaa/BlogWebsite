@@ -2,7 +2,11 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv")
 const mongoose = require("mongoose")
+const authRoute = require("./routes/auth");
+const userRoute = require("./routes/users");
+
 dotenv.config()
+app.use(express.json());
 
 mongoose.set("strictQuery", false);
 
@@ -10,9 +14,9 @@ mongoose.connect(process.env.MONGO_URL).then(console.log("Connected to MongoDB")
 
 console.log("baby")
 
-app.use("/eyeray", (req,res)=>{
-    console.log("hey this is eyeray url")
-})
+app.use("/api/auth", authRoute);
+app.use("/api/users", userRoute);
+
 
 app.listen("5001", ()=>{
     console.log("Backend is running.");
