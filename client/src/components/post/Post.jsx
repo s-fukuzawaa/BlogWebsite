@@ -1,35 +1,34 @@
 import "./post.css"
-
-export default function Post(){
+import { Link } from "react-router-dom"
+export default function Post({post}){
+    const PF = "http://localhost:5001/images/"
     return(
         <div className="post">
-            <img
-                className="postImg"
-                src="https://i.pinimg.com/564x/77/63/80/7763805725f024c87d7fb465c16220d3.jpg"
-                alt=""
-            />
+            {post.photo && (
+                <img
+                    className="postImg"
+                    src={ PF + post.photo }//"https://i.pinimg.com/564x/77/63/80/7763805725f024c87d7fb465c16220d3.jpg"
+                    alt=""
+                />
+            )}
+            
             <div className="postInfo">
                 <div className="postCats">
-                    <span className="postCat">Music</span>
-                    <span className="postCat">Life</span>
+                    {
+                        post.categories.map((c) => {
+                            <span className="postCat">{c.name}</span>
+                        })
+                    }
                 </div>
-                <span className="postTitle">
-                    Lorem ipsum
-                </span>
+                <Link className="link" to={`/post/${post._id}`}>
+                    <span className="postTitle">
+                        {post.title}
+                    </span>
+                </Link>
                 <hr/>
-                <span className="postDate"> 1 hour ago</span>
+                <span className="postDate">{new Date(post.createdAt).toDateString()}</span>
                 <p className="postDesc">
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
-                    Ad aut eum optio nihil, nobis id iure impedit laboriosam eveniet. Ipsa expedita dignissimos iusto vitae 
-                    nobis et reprehenderit aperiam voluptatum eaque?
-
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
-                    Ad aut eum optio nihil, nobis id iure impedit laboriosam eveniet. Ipsa expedita dignissimos iusto vitae 
-                    nobis et reprehenderit aperiam voluptatum eaque?
-
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
-                    Ad aut eum optio nihil, nobis id iure impedit laboriosam eveniet. Ipsa expedita dignissimos iusto vitae 
-                    nobis et reprehenderit aperiam voluptatum eaque?
+                    {post.desc}
                 </p>
             </div>
         </div>
