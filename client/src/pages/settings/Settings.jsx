@@ -5,7 +5,8 @@ import { Context } from "../../context/Context"
 import axios from "axios"
 
 export default function Settings(){
-    const {user} = useContext(Context)
+    const {user, dispatch} = useContext(Context)
+    const PF = "http://localhost:5001/images/"
     const [username,setUsername] = useState("");
     const [email,setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -14,6 +15,7 @@ export default function Settings(){
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        dispatch({type:"UPDATE_START"})
         const updatedUser = {
             userId: user._id,
             username,
@@ -33,9 +35,12 @@ export default function Settings(){
             }
         }
         try{
-            await axios.put("/users/"+user._id, updatedUser)
+            const res = await axios.put("/users/"+user._id, updatedUser)
             setSuccess(true)
-        }catch(err){}
+            dispatch({type:"UPDATE_SUCCESS", payload: res.data})
+        }catch(err){
+            dispatch({type:"UPDATE_FAILURE"})
+        }
     }
     return(
         <div className="settings">
@@ -47,7 +52,7 @@ export default function Settings(){
                 <form className="settingsForm" onSubmit={handleSubmit}>
                     <label>Profile Picture</label>
                     <div className="settingsPP">
-                        <img src={user.profilePic}//"https://i.pinimg.com/736x/79/66/1c/79661ce094727e32d528874bb9683fae.jpg" 
+                        <img src={file ? URL.createObjectURL(file): PF+user.profilePic}//"https://i.pinimg.com/736x/79/66/1c/79661ce094727e32d528874bb9683fae.jpg" 
                         alt="" />
                         <label htmlFor="fileInput">
                         <i className="settingsPPIcon fa-regular fa-circle-user"></i>
